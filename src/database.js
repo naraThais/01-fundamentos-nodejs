@@ -1,38 +1,39 @@
-import fs from 'node:fs/promises'
+import fs from 'node:fs/promises';
+import path from 'node:path';
 
-const databasePath = new URL('../db.json', import.meta.URL)
-console.log(databasePath)
+const databasePath = path.resolve(path.join('./', 'db.json'));
+console.log(databasePath);
 
-export class Database{
+export class Database {
+    #database = {};
 
-    #database = {} 
-    
-    constructor(){
-        fs.readFile(databasePath, 'utf-8').then(data => {
-            this.#database = JSON.parse(data)
-        })
-        .catch(() => {
-            this.#persist()
-        })
+    constructor() {
+        fs.readFile(databasePath, 'utf8')
+            .then(data => {
+                this.#database = JSON.parse(data);
+            })
+            .catch(() => {
+                this.#persist();
+            });
     }
 
-    #persist(){
-        fs.writeFile(databasePath,JSON.stringify(this.#database))
+    #persist() {
+        fs.writeFile(databasePath, JSON.stringify(this.#database));
     }
 
-    select(table){
-        const data = this.#database[table] ?? []
-
-        return data
+    select(table) {
+        const data = this.#database[table] ?? [];
+        return data;
     }
 
-    insert(table, data){
-        if (Array.isArray(this.#database[table])){
-            this.#database[table].push(data)
-        }else{
-            this.#database[table] = [data]
+    insert(table, data) {
+        if (Array.isArray(this.#database[table])) {
+            this.#database[table].push(data);
+        } else {
+            this.#database[table] = [data];
         }
 
+        this.#persist();
         return data;
     }
 }
