@@ -2,16 +2,6 @@ import http from 'node:http'
 import { json } from './middlewares/json.js'
 import { routes } from './routes.js'
 
-// Query parameters: URL Stateful => usados para filtros, paginaçao, busca, não sao info obrigatorios 
-// http://localhost:3333/users?usersId=1&name=Thais
-
-// Route Parameters: parametros n nomeados que tbm ficam na rota => identificaçao de recurso 
-// http://localhost:3333/users/1
-
-// Request Body: Envio de informaçoes de um form (https)
-
-
-
 const Server = http.createServer(async(req, res) => {
     const {method, url} = req 
     
